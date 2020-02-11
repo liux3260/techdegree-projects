@@ -59,9 +59,9 @@ function printQuote(){
  * `getRandomColor` function that randomly changes background color
 ***/
 function getRandomColor() {
-  var bgColor = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
+  var randomColor = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
 
-  document.body.style.background = bgColor;
+  document.body.style.background = randomColor;
   }
 
 /***
