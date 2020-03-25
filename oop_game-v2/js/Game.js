@@ -3,30 +3,115 @@
  * Game.js */
 
  class Game{
+    overlay = document.querySelector("#overlay");
      constructor(missed,activePhrase){
          this.missed = 0;
          this.phrases = this.createPhrases();
          this.activePhrase = null;
      }
 
+     /**
+      * * Begins game by selecting a random phrase and displaying it to user
+      * */
      startGame= () =>{
-         const overlay = document.querySelector("#overlay");
-         overlay.style.visibility = 'hidden'; 
+         this.overlay.style.visibility = 'hidden'; 
          this.activePhrase = this.getRandomPhrase();
          this.activePhrase.addPhraseToDisplay();
      }
+
+     /**
+      * * Selects random phrase from phrases property
+      * * @return {Object} Phrase object chosen to be used
+      * */
      getRandomPhrase = () =>{
          const rand = Math.floor(Math.random() * this.phrases.length);
          return this.phrases[rand];
 
      }
-     handleInteraction = () =>{}
+
+     /**
+        * Handles onscreen keyboard button clicks
+        * @param (HTMLButtonElement) button - The clicked button element
+        */
+     handleInteraction = (button) =>{
+         const letterClicked = button.innerHTML;
+         button.disabled = true;
+         if(this.activePhrase.checkLetter(letterClicked)){
+             button.className += " chosen";
+             this.activePhrase.showMatchedLetter(letterClicked);
+             if(this.checkForWin()){
+                 this.gameOver(true);
+             }
+         }
+         else{
+            button.className += " wrong";
+            this.removeLife();
+         }
+     }
+
+     /**
+        * Increases the value of the missed property
+        * Removes a life from the scoreboard
+        * Checks if player has remaining lives and ends game if player is out
+        */
      removeLife=() =>{
-         const life= document.querySelector("#scoreboard >ol");
+         const lifes= document.querySelectorAll(".tries");
+         const child = lifes[this.missed].firstChild;
+         child.src = child.src.replace("liveHeart.png","lostHeart.png");
+         this.missed += 1;
+         if(this.missed ==5){
+             this.gameOver(false);
+         }
+
 
      }
-     checkForWin = () =>{}
-     gameOver = () =>{}
+
+     /**
+      * * Checks for winning move
+        * @return {boolean} True if game has been won, false if game wasn't
+        won
+        */
+     checkForWin = () =>{
+         const li = this.activePhrase.ul.querySelectorAll('li');
+         const liArray = this.activePhrase.nodeListToArray(li);
+         return liArray.reduce((acc,cur) =>{
+             return (cur.className.includes("show") || cur.className.includes("space") )&& acc;
+         },true);
+     }
+
+     /**
+        * Displays game over message
+        * @param {boolean} gameWon - Whether or not the user won the game
+        */
+     gameOver = (gameWon) =>{
+        this.overlay.style.visibility = "visible";
+        const h1 = this.overlay.querySelector("h1");
+         if(gameWon){
+             h1.className = "win";
+             h1.innerHTML = "You Win!";
+         }
+         else{
+            h1.className = "lose";
+            h1.innerHTML = "You Lost.";
+         }
+         this.reset();
+     }
+
+
+     /**
+      * Reset everything after game is over
+      */
+     reset=() =>{
+         this.activePhrase.ul.innerHTML = "";
+         const keyboards = document.querySelectorAll(".key");
+         keyboards.forEach(keyboard => {
+             keyboard.className = "key";
+             keyboard.disabled = false;
+        });
+        const lifes= document.querySelectorAll(".tries");
+        lifes.forEach(life =>life.firstChild.src = "images/liveHeart.png");
+
+     }
 
      /**
       * * Creates phrases for use in game

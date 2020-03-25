@@ -130,6 +130,13 @@ button {
   justify-content: center;
 }
 
+.key:hover {
+  display: flex;
+  justify-content: center;
+  background-color: #4CAF50;
+  color:white;
+}
+
 .chosen {
   background: #3a3f58;
   border-radius: 5px;
