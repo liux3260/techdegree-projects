@@ -288,6 +288,7 @@ submit.addEventListener("click", function (e) {
  add keyup event listener to accomplish real-time validation
  */
 name.addEventListener("keyup", createListener(isValidName));
+name.focus();
 email.addEventListener("keyup", createListener(isValidEmail));
 cc_num.addEventListener("keyup", createListener(isValidCreditCardNumber));
 zip.addEventListener("keyup", createListener(isValidZipCode));
