@@ -140,6 +140,15 @@ function closeModal(){
     body.removeChild(modal_container);
 }
 
+//change date format
+function changeDateFormat(date){
+    const dateTime = new Date(date);
+    let month = dateTime.getMonth() +1;
+    let day = dateTime.getDate();
+    let year = dateTime.getFullYear();
+    return `${month}/${day}/${year}`
+}
+
 //Function for genrating modal based on the card
 function generateModal(data){     
     
@@ -170,7 +179,7 @@ function generateModal(data){
         <hr>
         <p class="modal-text">${data.phone}</p>
         <p class="modal-text">${data.location.street.number} ${data.location.street.name}, ${data.location.city}, ${data.location.state} ${data.location.postcode}</p>
-        <p class="modal-text">Birthday: ${data.dob.date}</p>`;
+        <p class="modal-text">Birthday: ${changeDateFormat(data.dob.date)}</p>`;
 
     modal_info.innerHTML = modal_html;
     modal.appendChild(modal_info);
